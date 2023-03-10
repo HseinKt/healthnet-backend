@@ -7,8 +7,6 @@ $user_id = $_POST['user_id'];
 $is_active = $_POST['is_active'];
 $date_joined = date('Y-m-d');
 $date_left = date('Y-m-d');
-// $usertype_id = $_POST['usertype_id'];
-
 
 try {
     // Check if the user exists
