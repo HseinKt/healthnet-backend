@@ -7,8 +7,6 @@ $user_id = $_POST['user_id'];
 $is_active = $_POST['is_active'];
 $date_joined = date('Y-m-d');
 $date_left = date('Y-m-d');
-// $usertype_id = $_POST['usertype_id'];
-
 
 try {
     // Check if the user exists
@@ -28,6 +26,7 @@ try {
     if ($num_rows > 0) {
         $response['status'] = "Employee already has an ID";
     }else {
+        //check the type of users
         $check_type = $mysqli->prepare('SELECT u.usertype_id
         FROM users u  
         JOIN user_types t ON t.id = u.usertype_id 
