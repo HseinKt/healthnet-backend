@@ -29,25 +29,37 @@ $check_bed->execute();
 $check_bed->store_result();
 $num_beds = $check_bed->num_rows();
 
+
 if ($num_beds != 0 ) {
     $response['status'] = "this bed is not available";
 } else {
     if ($num_rows == 0) {
         $response['status'] = "No available beds";
-    }else {
-        try {
-            $query = $mysqli->prepare('INSERT INTO user_rooms(user_id, room_id,datetime_entered, datetime_left, bed_id) VALUES(?,?,?,?,?)');
+    } else {
+        // Check if the user_id exists in the users table
+        $check_user = $mysqli->prepare('SELECT id FROM users WHERE id = ?');
+        $check_user->bind_param('i', $user_id);
+        $check_user->execute();
+        $check_user->store_result();
+        $num_users = $check_user->num_rows();
+
+        if ($num_users == 0) {
+            $response['status'] = "Invalid user ID";
+        } else {
+            // Insert the user into the user_rooms table
             $datetime_left = null; 
+            $query = $mysqli->prepare('INSERT INTO user_rooms(user_id, room_id, datetime_entered, datetime_left, bed_id) VALUES(?,?,?,?,?)');
             $query->bind_param('iissi', $user_id, $room_id, date('Y-m-d'), $datetime_left, $bed_id);
             $query->execute();
-            $response['status'] = "success";
-        } catch (exception $e) {
-        $response['status'] = $e->getMessage();
-    }
-        
+
+            if ($mysqli->errno != 0) {
+                $response['status'] = "Database error: " . $mysqli->error;
+            } else {
+                $response['status'] = "success";
+            }
+        }
     }
 }
-
 
 echo json_encode($response);
 
