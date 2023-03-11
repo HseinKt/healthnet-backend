@@ -2,8 +2,8 @@
 
 include "connection_db.php";
 // session_start();
-// // Initialize the variable to hold the amount value
-// $amount = 0;
+// Initialize the variable to hold the amount value
+$amount = 0;
 
 $user_id = $_POST['user_id'];
 
@@ -27,14 +27,14 @@ while($row = $result->fetch_array(MYSQLI_NUM)) {
     $arr['quantity'] = $row[3];
     $arr['user_id'] = $row[4];
     $arr['amount'] = $row[2] * $row[3];
-//('UPDATE services SET status = "approve" WHERE id = ?');
-    // $query2 = $mysqli -> prepare('UPDATE invoices ');
+    $amount = $arr['amount'];
 
-    // $query->bind_param("i", $user_id);
-    // $query->execute();
-    // $result = $query->get_result();
-    // $amount += $arr['amount'];
-
+    // Update the amount into the invoices
+    $query2 = $mysqli -> prepare('UPDATE invoices SET total_amount = ? WHERE user_id = ?');
+    $query2->bind_param("si", $amount, $user_id);
+    $query2->execute();
+    $result2 = $query2->get_result();
+    
     array_push($response, $arr);
 }
 
