@@ -1,6 +1,7 @@
 <?php
 
 include "connection_db.php";
+session_start();
 
 $user_id = $_POST['user_id'];  //4
 $department_id = $_POST['department_id']; //1
@@ -51,6 +52,27 @@ if ($num_beds != 0 ) {
             $query = $mysqli->prepare('INSERT INTO user_rooms(user_id, room_id, datetime_entered, datetime_left, bed_id) VALUES(?,?,?,?,?)');
             $query->bind_param('iissi', $user_id, $room_id, date('Y-m-d'), $datetime_left, $bed_id);
             $query->execute();
+
+            // Check the cost day of the room
+
+            $check_cost = $mysqli->prepare('SELECT cost_day_usd 
+            FROM rooms r 
+            JOIN user_rooms ur ON r.id = ur.room_id 
+            WHERE ur.user_id = ?');
+            $check_cost->bind_param('i', $user_id);
+            $check_cost->execute();
+            $result3 = $check_cost->get_result();
+
+            while($row = $result3 -> fetch_array(MYSQLI_NUM)) {
+                $_SESSION['amount'] += $row[0];
+            }
+
+            // Update the cost of the room into the invoices
+            $query2 = $mysqli -> prepare('UPDATE invoices SET total_amount = ? WHERE user_id = ?');
+            $query2->bind_param("si", $_SESSION['amount'], $user_id);
+            $query2->execute();
+            $result2 = $query2->get_result();
+
 
             if ($mysqli->errno != 0) {
                 $response['status'] = "Database error: " . $mysqli->error;

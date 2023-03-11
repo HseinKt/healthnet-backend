@@ -1,5 +1,6 @@
 <?php
 include "connection_db.php";
+session_start();
 
 $email = $_POST['email'];
 $password = $_POST['password'];
@@ -22,7 +23,8 @@ else {
         $response['response'] = "logged in";
         $response['name'] = $name;
         $response['email'] = $email;
-        $response['usertype_id'] = $usertype_id;        
+        $response['usertype_id'] = $usertype_id;  
+        $_SESSION['amount'] = 0;      
     }
     else {
         $response['response'] = "Incorrect password";

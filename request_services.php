@@ -1,6 +1,8 @@
 <?php
 
 include "connection_db.php";
+session_start();
+
 $response = [];
 
 // Check if the required fields are set
@@ -22,10 +24,14 @@ $result = $query->execute();
 
 if ($result) {
     $response["status"] = "Added request successfully.";
+    // Store the amount value in a session variable
+    $_SESSION['patient_id'] = $patient_id;
+    $_SESSION['amount'] += $cost;
 }
 else {
     $response["status"] = "request failed";
 }
 echo json_encode($response);
+
 
 ?>

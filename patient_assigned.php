@@ -1,6 +1,8 @@
 <?php
 
 include "connection_db.php";
+session_start();
+$_SESSION['amount'] = 0;
 
 $hospital_id = $_POST['hospital_id'];
 $user_id = $_POST['user_id'];
@@ -42,8 +44,8 @@ try {
             $query->execute();
 
             // insert the default invoices to the new patient
-            $query2 = $mysqli -> prepare("insert into invoices(user_id , hospital_id, total_amount, date_issued) values(?,?,0,?)");
-            $query2 -> bind_param('iis',$user_id, $hospital_id , $date_joined);
+            $query2 = $mysqli -> prepare("insert into invoices(user_id , hospital_id, total_amount, date_issued) values(?,?,?,?)");
+            $query2 -> bind_param('iiss',$user_id, $hospital_id , $_SESSION['amount'], $date_joined);
             $query2 ->execute();
 
             $response['status'] = "success";

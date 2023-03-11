@@ -1,7 +1,7 @@
 <?php
 
 include "connection_db.php";
-// session_start();
+session_start();
 // Initialize the variable to hold the amount value
 $amount = 0;
 
@@ -29,9 +29,11 @@ while($row = $result->fetch_array(MYSQLI_NUM)) {
     $arr['amount'] = $row[2] * $row[3];
     $amount = $arr['amount'];
 
-    // Update the amount into the invoices
+    $_SESSION['amount'] += $amount;
+
+    // Update the amount medications into the invoices
     $query2 = $mysqli -> prepare('UPDATE invoices SET total_amount = ? WHERE user_id = ?');
-    $query2->bind_param("si", $amount, $user_id);
+    $query2->bind_param("si", $_SESSION['amount'], $user_id);
     $query2->execute();
     $result2 = $query2->get_result();
     
@@ -40,8 +42,6 @@ while($row = $result->fetch_array(MYSQLI_NUM)) {
 
 echo json_encode($response);
 
-// Store the amount value in a session variable
-// $_SESSION['amount'] = $amount;
 
 ?>
 
