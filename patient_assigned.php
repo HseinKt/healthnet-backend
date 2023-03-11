@@ -6,7 +6,7 @@ $hospital_id = $_POST['hospital_id'];
 $user_id = $_POST['user_id'];
 $is_active = $_POST['is_active'];
 $date_joined = date('Y-m-d');
-$date_left = date('Y-m-d');
+$date_left = null;
 
 try {
     // Check if the user exists
@@ -40,6 +40,12 @@ try {
             $query = $mysqli -> prepare($sql);
             $query -> bind_param('iisss',$hospital_id, $user_id , $is_active, $date_joined, $date_left);
             $query->execute();
+
+            // insert the default invoices to the new patient
+            $query2 = $mysqli -> prepare("insert into invoices(user_id , hospital_id, total_amount, date_issued) values(?,?,0,?)");
+            $query2 -> bind_param('iis',$user_id, $hospital_id , $date_joined);
+            $query2 ->execute();
+
             $response['status'] = "success";
         }else {
             $response['status'] = "Sorry this id belongs to an employee";
