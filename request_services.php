@@ -1,6 +1,14 @@
 <?php
 
 include "connection_db.php";
+$response = [];
+
+// Check if the required fields are set
+if (!isset($_POST['patient_id'], $_POST['employee_id'], $_POST['department_id'], $_POST['description'], $_POST['cost'])) {
+    $response["status"] = "Missing required fields.";
+    echo json_encode($response);
+    exit();
+}
 
 $patient_id = $_POST['patient_id'];
 $employee_id = $_POST['employee_id'];
@@ -11,8 +19,6 @@ $cost = $_POST['cost'];
 $query = $mysqli->prepare('INSERT INTO services (employee_id, patient_id, description, cost, department_id, status) VALUES (?, ?, ?, ?, ?, "pending")');
 $query->bind_param('iissi', $employee_id, $patient_id, $description, $cost, $department_id);
 $result = $query->execute();
-
-$response = [];
 
 if ($result) {
     $response["status"] = "Added request successfully.";
