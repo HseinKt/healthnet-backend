@@ -10,6 +10,7 @@ if (!isset($_POST['patient_id'], $_POST['employee_id'], $_POST['department_id'],
     exit();
 }
 
+
 $patient_id = $_POST['patient_id'];
 $employee_id = $_POST['employee_id'];
 $department_id = $_POST['department_id'];
