@@ -5,7 +5,7 @@ include "connection_db.php";
 $name = $_POST['name'];
 $email = $_POST['email'];
 $password = $_POST['password'];
-$dob = date('Y-m-d');
+$dob = $_POST['dob'];
 $usertype_id = $_POST['usertype_id'];
 
 $check_email = $mysqli->prepare('select email from users where email=?');
