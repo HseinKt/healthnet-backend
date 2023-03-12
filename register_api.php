@@ -6,7 +6,7 @@ $name = $_POST['name'];
 $email = $_POST['email'];
 $password = $_POST['password'];
 $dob = $_POST['dob'];
-$usertype_id = $_POST['usertype_id'];
+$usertype_id = 1;
 
 $check_email = $mysqli->prepare('select email from users where email=?');
 $check_email->bind_param('s', $email);
