@@ -4,7 +4,7 @@ session_start();
 
 $email = $_POST['email'];
 $password = $_POST['password'];
-$usertype_id = $_POST['usertype_id'];
+$usertype_id = 1;
 
 $query = $mysqli -> prepare("select * from users where email = ?");
 $query -> bind_param('s',$email);
