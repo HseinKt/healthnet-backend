@@ -3,7 +3,7 @@
 include("connection_db.php");
 
 session_start();
-$user_id = $_SESSION['patient_id']  ; 
+$user_id = $_SESSION['patient_id']; 
 
 //require the TCPDF library
 require_once('tcpdf/tcpdf.php');
@@ -19,14 +19,6 @@ $pdf->SetSubject('Invoice');
 $pdf->AddPage();    
 
 $pdf->SetFont('dejavusans', '', 12);
-
-// $sql_query = "SELECT id FROM users";
-// $result = $mysqli -> query($sql_query);
-// $response = [];
-
-// while($row = $result -> fetch_array(MYSQLI_NUM)) {
-//     $user_id = $row[0];
-// }
 
 $sql_query = $mysqli -> prepare('SELECT total_amount FROM invoices WHERE user_id = ?');
 $sql_query -> bind_param('i', $user_id);
