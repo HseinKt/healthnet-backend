@@ -24,7 +24,8 @@ else {
         $response['name'] = $name;
         $response['email'] = $email;
         $response['usertype_id'] = $usertype_id;  
-        $_SESSION['amount'] = 0;      
+        $_SESSION['amount'] = 0;   
+        $_SESSION['user_id'] = $id;   
     }
     else {
         $response['response'] = "Incorrect password";
