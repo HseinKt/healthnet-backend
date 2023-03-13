@@ -6,7 +6,7 @@ $hospital_id = $_POST['hospital_id'];
 $user_id = $_POST['user_id'];
 $is_active = $_POST['is_active'];
 $date_joined = date('Y-m-d');
-$date_left = date('Y-m-d');
+$date_left = NULL;
 
 try {
     // Check if the user exists
