@@ -1,11 +1,16 @@
 <?php
+// include the JWT library
+require_once 'C:\xampp\htdocs\php-jwt\php-jwt\src\JWT.php';
 include "connection_db.php";
+use firebase\JWT\JWT;
+
 session_start();
 
 $email = $_POST['email'];
 $password = $_POST['password'];
 $usertype_id = 1;
 
+// query the database
 $query = $mysqli -> prepare("select * from users where email = ?");
 $query -> bind_param('s',$email);
 $query -> execute();
@@ -20,17 +25,28 @@ if ($num_rows == 0) {
 }
 else {
     if (password_verify($password,$hashed_password)) {
+
+        // Generate a JWT 
+        $data = array(
+            "user_id" => $id,
+            "name" => $name,
+            "email" => $email,
+            "usertype_id" => $usertype_id,
+            "amount" => 0
+        );
+        $secret_key = "331HK";
+        
+        $jwt = JWT::encode($data, $secret_key,'HS256');
+
         $response['response'] = "logged in";
-        $response['name'] = $name;
-        $response['email'] = $email;
-        $response['usertype_id'] = $usertype_id;  
-        $_SESSION['amount'] = 0;   
-        $_SESSION['user_id'] = $id;   
+        $response['jwt'] = $jwt;
+        
     }
     else {
         $response['response'] = "Incorrect password";
     }
 }
+
 echo json_encode($response);
 
 ?>
